@@ -1,0 +1,287 @@
+<!--
+  MIT License
+  Copyright (c) 2026 Timo Heimonen <timo.heimonen@proton.me>
+  See LICENSE file for full terms at github.com/timoheimonen/diffvoid
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About - Free Diff Checker</title>
+  <meta name="description" content="About Free Diff Checker: browser-based text and file diff on web-free.site, powered by Timo Heimonen's MIT-licensed diffvoid engine.">
+  <link rel="canonical" href="https://free-diff-checker.web-free.site/about">
+  <link rel="alternate" hreflang="en" href="https://free-diff-checker.web-free.site/about">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About — Free Diff Checker">
+  <meta property="og:url" content="https://free-diff-checker.web-free.site/about">
+  <link rel="stylesheet" href="/shared.css">
+  <script src="theme.js"></script>
+</head>
+
+<body>
+  <div class="topbar">
+    <a class="wordmark" href="/">Free Diff Checker</a>
+    <a class="topbar-link" href="/">Open the tool →</a>
+  </div>
+
+  <main>
+    <header class="hero">
+      <h1 class="eyebrow">About Free Diff Checker</h1>
+      <p class="display">Your secure place to compare texts.</p>
+      <p class="lead"><strong>Free Diff Checker</strong> is a free tool on <a href="https://web-free.site/">web-free.site</a>. It compares text and files entirely in your browser. The diff engine is <a href="https://github.com/timoheimonen/diffvoid" rel="noopener">diffvoid</a> by Timo Heimonen (MIT license).</p>
+      <a class="cta" href="/">Compare texts <span aria-hidden="true">→</span></a>
+      <div class="meta">Version 2.3.0</div>
+    </header>
+
+    <section aria-labelledby="how">
+      <h2 id="how">How to use it</h2>
+      <ol class="steps">
+        <li>
+          <span class="step-num">1</span>
+          <div><strong>Paste or open</strong><span>Paste text into the left and right panels, or drop or open a file on
+              each side. Files are read in your browser and never uploaded.</span></div>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <div><strong>Compare</strong><span>The comparison starts automatically.</span></div>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <div><strong>Read the diff</strong><span>Changes, gaps, invisible and confusable characters are highlighted
+              line by line.</span></div>
+        </li>
+        <li>
+          <span class="step-num">4</span>
+          <div><strong>Review</strong><span>Step from change to change with the arrow buttons, Alt+Up/Down or F7, or
+              click the overview map beside the panes. <em>changes only</em> folds unchanged lines away, and <em>unified</em>
+              shows both texts in one column.</span></div>
+        </li>
+        <li>
+          <span class="step-num">5</span>
+          <div><strong>Merge</strong><span>Select a change and keep its left or right version. Every merge can be
+              undone.</span></div>
+        </li>
+        <li>
+          <span class="step-num">6</span>
+          <div><strong>Copy or export</strong><span>Copy either side exactly, or cleaned of invisible characters, or
+              take the differences as a unified diff or a .patch file.</span></div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="read">
+      <h2 id="read">How to read the diff</h2>
+      <ul class="legend">
+        <li>
+          <span class="sample">same text</span>
+          <div><strong>Matching lines</strong> <span>No background highlight - text is identical.</span></div>
+        </li>
+        <li>
+          <span class="sample sample-mismatch">changed</span>
+          <div><strong>Modified lines</strong> <span>Red background with precise red character ranges when the detail
+              budget permits.</span></div>
+        </li>
+        <li>
+          <span class="sample sample-gap">&nbsp;</span>
+          <div><strong>Added or missing lines</strong> <span>The source line is highlighted on one side and aligned
+              with a highlighted empty gap on the other.</span></div>
+        </li>
+        <li>
+          <span class="sample sample-match">100% Match</span>
+          <div><strong>Difference counter</strong> <span>Counts changed visual rows: modified, added, and missing
+              rows.</span></div>
+        </li>
+        <li>
+          <span class="sample sample-invisible">a<b>|</b>b <b>[NBSP]</b></span>
+          <div><strong>Invisible characters</strong> <span>Shown as symbols like <code>|</code>, <code>[ZWSP]</code>,
+              or red boxes for spaces in diffs.</span></div>
+        </li>
+        <li>
+          <span class="sample sample-confusable">p<b>а</b>ypal</span>
+          <div><strong>Confusable characters</strong> <span>Shown with a dotted underline, a small marker, and a
+              tooltip that names the actual Unicode character.</span></div>
+        </li>
+        <li>
+          <span class="sample">‹ … ›</span>
+          <div><strong>Reduced long-line preview</strong> <span>Previous/Next controls move between bounded views
+              around changes; preview ellipses are not part of the source text.</span></div>
+        </li>
+        <li>
+          <span class="sample">Copy L</span>
+          <div><strong>Copy L/R</strong> <span>Copies the exact original side. <strong>Clean L/R</strong> appears when
+              invisible characters are detected and returns a normalized version instead.</span></div>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="features">
+      <h2 id="features">Key features</h2>
+      <ul class="features">
+        <li><strong>Privacy first</strong><span>No server uploads, no tracking, no analytics. Everything stays in your
+            browser.</span></li>
+        <li><strong>Line-aware Myers diff</strong><span>A first-party Myers implementation preserves exact matching-line
+            anchors when lines are inserted or removed.</span></li>
+        <li><strong>Bounded row alignment</strong><span>Unmatched hunks use deterministic full or banded dynamic
+            programming to pair similar modified lines. If reliable pairing exceeds the shared work budget, the lines
+            are conservatively shown as missing and added.</span></li>
+        <li><strong>Character-level diff</strong><span>Selected modified pairs are compared word by word, so a changed number or identifier is highlighted as one
+            piece, and stored as compact UTF-16 change ranges instead of permanent per-character objects.</span></li>
+        <li><strong>Moved lines</strong><span>Lines that were removed in one place and added unchanged in another are
+            shown as moved, with the line number of their counterpart. Lines of a moved block that were also edited
+            stay part of the move, with their changes marked in red. Added and removed blocks are placed on natural
+            boundaries, so a moved or new function keeps its own braces.</span></li>
+        <li><strong>Unicode normalization hint</strong><span>Text that is the same characters in a different
+            normalization form (NFC/NFD) is underlined and explained instead of looking like an unexplained change.</span></li>
+        <li><strong>Line endings and whitespace</strong><span>CRLF and LF texts match line by line, and the number of
+            rows whose line endings differ is reported once. The optional ignore whitespace toggle sets aside
+            indentation, trailing spaces and tabs, and the amount of spacing between words.</span></li>
+        <li><strong>Letter case</strong><span>The optional ignore case toggle treats upper and lower case letters as
+            the same and reports how many rows differ only in case.</span></li>
+        <li><strong>Invisible character detection</strong><span>Highlights zero-width spaces, non-breaking spaces, and
+            other hidden Unicode characters that can cause subtle bugs.</span></li>
+        <li><strong>Confusable character detection</strong><span>Marks common Greek and Cyrillic homographs that look
+            like Latin letters, with tooltips explaining the real Unicode character.</span></li>
+        <li><strong>Exact and clean copying</strong><span>Copy L/R always copies the complete original source after a
+            comparison, including rows outside the visible window and trailing newlines. When invisible characters are
+            detected, Clean L/R also appears to normalize hidden spacing characters and remove soft hyphens and BOM
+            characters.</span></li>
+        <li><strong>Adjustable panels</strong><span>Drag the center divider to adjust left/right panel widths.
+            Double-click to reset to 50/50.</span></li>
+        <li><strong>Clear button</strong><span>One-click to clear both panels and reset to default view.</span></li>
+        <li><strong>Dark mode</strong><span>Follows your system theme, or toggle between light and dark with the
+            preference saved locally.</span></li>
+        <li><strong>Cost-based Web Worker processing</strong><span>Comparisons normally run in a background worker.
+            Only input proven small enough may fall back to synchronous processing when a worker cannot be
+            created.</span></li>
+        <li><strong>Virtualized rendering</strong><span>Both panes mount only the same visible row window, with hard
+            row and DOM-node caps and rendering work split across animation frames.</span></li>
+        <li><strong>Long-line previews</strong><span>Dense lines over 20,000 code units are shown as paged previews
+            around their changes while exact copying continues to use the complete source.</span></li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="invisible">
+      <h2 id="invisible">Detected invisible characters</h2>
+      <ul class="markers">
+        <li><code>|</code>Zero-width space (U+200B)</li>
+        <li><code>[ZWNJ]</code>Zero-width non-joiner (U+200C)</li>
+        <li><code>[ZWJ]</code>Zero-width joiner (U+200D)</li>
+        <li><code>[NBSP]</code>Non-breaking space (U+00A0)</li>
+        <li><code>[HS]</code>Hair space (U+200A)</li>
+        <li><code>[THIN]</code>Thin space (U+2009)</li>
+        <li><code>[EN]</code>En space (U+2002)</li>
+        <li><code>[EM]</code>Em space (U+2003)</li>
+        <li><code>[SHY]</code>Soft hyphen (U+00AD)</li>
+        <li><code>[BOM]</code>BOM / zero-width no-break space (U+FEFF)</li>
+      </ul>
+      <p class="muted">And many more Unicode whitespace characters.</p>
+    </section>
+
+    <section aria-labelledby="confusable">
+      <h2 id="confusable">Detected confusable characters</h2>
+      <p>Confusable characters are visible letters from another script that can look like ordinary Latin letters.
+        Free Diff Checker marks common Greek and Cyrillic lookalikes, such as Cyrillic <code>А</code> (U+0410) that looks like
+        Latin <code>A</code>, with a dotted underline and a tooltip.</p>
+      <p class="muted">Invisible characters are hidden or spacing-related. Confusable characters are visible, but easy
+        to misread in code, domains, copied text, and identifiers.</p>
+    </section>
+
+    <section aria-labelledby="internals">
+      <h2 id="internals">Under the hood</h2>
+      <p>A lightweight scan first validates the input and estimates its cost. Accepted comparisons normally run in a
+        same-origin Web Worker. If worker creation is unavailable, only a comparison classified as safely small may
+        run synchronously; heavy input is stopped with an instruction to serve the app over HTTP or compare smaller
+        sections.</p>
+      <p>For that reason, opening the app from a <code>file://</code> URL is not recommended. If worker creation fails
+        immediately, only a safely small comparison may fall back to synchronous processing. Serve the
+        <code>public/</code> directory over HTTP for the complete comparison flow.</p>
+      <p>Myers line diff establishes exact anchors. Inside each unmatched hunk, a bounded dynamic-programming pass
+        selects similar modified-line pairs with deterministic tie-breaking. It uses a full matrix for small hunks and
+        a banded matrix for larger ones. If the remaining budget cannot support reliable alignment, no pair is guessed:
+        the hunk is shown as missing and added lines.</p>
+      <p>Only the final modified pairs receive a grapheme-aware, word-level character comparison. The result is an atomic,
+        source-free compact model containing row indexes, line-start arrays, and UTF-16 change ranges. The original
+        left and right texts remain the only source of truth in the page.</p>
+      <p>The result view has fixed-height, non-wrapping rows and creates DOM only for the visible window: at most 200
+        rows per pane and 8,000 nodes across both panes. Very dense long lines use a paged preview. If exact character
+        decoration must be simplified, Free Diff Checker displays <strong>Detailed rendering reduced for performance</strong>;
+        this never changes the text returned by Copy L/R.</p>
+      <p>Safe practical limits are 25,000 lines, 2,000,000 characters per side, 100,000 characters per line, and shared
+        bounds for line diffing, alignment, character diffing, compact ranges, and rendering. Input outside those bounds
+        receives a clear warning instead of unbounded browser work.</p>
+      <p>All computation happens client-side using JavaScript. Compared text may pass between the page and its
+        in-browser Worker, but there is no backend processing and no network transmission of that text.</p>
+    </section>
+
+    <section aria-labelledby="privacy">
+      <h2 id="privacy">Private by design</h2>
+      <p>Compared text is not sent to our servers for diffing. This deployment shows Adsterra ads and uses Cloudflare Web Analytics. Your theme preference may be stored locally. Files and patches are created in the browser.</p>
+      <p class="muted">Read the full <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of
+          Service</a>.</p>
+    </section>
+
+    <section aria-labelledby="source">
+      <h2 id="source">Open source</h2>
+      <p>The comparison core is open source at <a href="https://github.com/timoheimonen/diffvoid" target="_blank" rel="noopener">github.com/timoheimonen/diffvoid</a>. This site’s pages and deployment config live in the <code>web-free-site/free-diff-checker</code> repository.</p>
+    </section>
+
+    <section aria-labelledby="contact">
+      <h2 id="contact">Contact</h2>
+      <p>Engine by Timo Heimonen · <a href="mailto:timo.heimonen@proton.me">timo.heimonen@proton.me</a>. Site feedback: <a href="/contact">contact</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>Powered by <a href="https://github.com/timoheimonen/diffvoid" rel="noopener">diffvoid</a> (MIT) · <a href="https://web-free.site/">web-free.site</a></span>
+    <nav aria-label="Site">
+      <a href="/">Tool</a>
+      <a href="/about">About</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </footer>
+
+<script data-cfasync="false" data-ad="popunder" src="https://abscloud.org/1/f6ba4b22631d0daee5daabeea0c1d143"></script>
+<script data-cfasync="false" data-ad="social-bar" src="https://bauval.org/14/82dc497890847b316dfb78ed935ea20e"></script>
+<script src="/wf-ads.js" defer></script>
+
+<aside id="wf-more-tools" class="wf-more-tools" aria-labelledby="wf-mt-title">
+  <style>
+    .wf-more-tools{box-sizing:border-box;width:100%;margin:2.5rem 0 0;padding:1.5rem 1rem 5rem;border-top:1px solid rgba(0,0,0,.12);background:rgba(248,249,251,.97);color:#1a1a1a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;line-height:1.5}
+    .wf-more-tools *{box-sizing:border-box}
+    .wf-more-tools h2{margin:0 0 .35rem;font-size:1.15rem;font-weight:700}
+    .wf-more-tools .wf-mt-lead{margin:0 0 1rem;color:#333}
+    .wf-more-tools .wf-mt-lead a{color:#0b57d0}
+    .wf-more-tools .wf-mt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem 1.25rem}
+    .wf-more-tools h3{margin:0 0 .4rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:#444}
+    .wf-more-tools ul{margin:0;padding:0;list-style:none}
+    .wf-more-tools li{margin:0 0 .25rem}
+    .wf-more-tools a{color:#0b57d0;text-decoration:underline}
+    .wf-more-tools a:hover{text-decoration:none}
+    @media (prefers-color-scheme:dark){
+      .wf-more-tools{background:rgba(22,24,28,.96);color:#f2f2f2;border-top-color:rgba(255,255,255,.14)}
+      .wf-more-tools .wf-mt-lead,.wf-more-tools h3{color:#c8c8c8}
+      .wf-more-tools a{color:#8ab4f8}
+    }
+  </style>
+  <h2 id="wf-mt-title">More free tools</h2>
+  <p class="wf-mt-lead">These utilities run in your browser. Browse the full list on <a href="https://web-free.site/">web-free.site</a>.</p>
+  <div class="wf-mt-grid">
+    <div class="wf-mt-cat wf-mt-guides"><h3>Guides on this site</h3><ul><li><a href="/how-to-compare-two-text-files">How to compare two text files</a></li><li><a href="/how-to-make-a-unified-diff-patch">How to make a unified diff patch</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Documents &amp; writing</h3><ul><li><a href="https://free-word-counter.web-free.site/">Free Word Counter</a></li><li><a href="https://free-pdf-converter.web-free.site/">Free PDF Converter</a></li><li><a href="https://free-cv-maker.web-free.site/">Free CV Maker</a></li><li><a href="https://free-invoice-generator.web-free.site/">Free Invoice Generator</a></li><li><a href="https://free-typing-test.web-free.site/">Free Typing Test</a></li><li><a href="https://free-signature-generator.web-free.site/">Free Signature Generator</a></li><li><a href="https://free-email-signature-generator.web-free.site/">Free Email Signature Generator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Images &amp; codes</h3><ul><li><a href="https://free-qr-code-creator.web-free.site/">Free QR Code Creator</a></li><li><a href="https://free-image-resizer.web-free.site/">Free Image Resizer</a></li><li><a href="https://free-image-to-text.web-free.site/">Free Image to Text</a></li><li><a href="https://free-background-remover.web-free.site/">Free Background Remover</a></li><li><a href="https://free-image-compressor.web-free.site/">Free Image Compressor</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Calculators &amp; currency</h3><ul><li><a href="https://free-online-calculator.web-free.site/">Free Online Calculator</a></li><li><a href="https://free-currency-converter.web-free.site/">Free Currency Converter</a></li><li><a href="https://free-unit-converter.web-free.site/">Free Unit Converter</a></li><li><a href="https://free-loan-calculator.web-free.site/">Free Loan Calculator</a></li><li><a href="https://free-age-calculator.web-free.site/">Free Age Calculator</a></li><li><a href="https://free-percentage-calculator.web-free.site/">Free Percentage Calculator</a></li><li><a href="https://free-bmi-calculator.web-free.site/">Free BMI Calculator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Text &amp; SEO</h3><ul><li><a href="https://free-ai-humanizer.web-free.site/">Free AI Humanizer</a></li><li><a href="https://free-seo-generator.web-free.site/">Free SEO Generator</a></li><li><a href="https://free-backlink-generator.web-free.site/">Free Backlink Generator</a></li><li><a href="https://free-json-formatter.web-free.site/">Free JSON Formatter</a></li><li><a href="https://free-text-to-speech.web-free.site/">Free Text to Speech</a></li><li><a href="https://free-speech-to-text.web-free.site/">Free Speech to Text</a></li><li><strong>Free Diff Checker</strong></li></ul></div>
+    <div class="wf-mt-cat"><h3>Audio &amp; video</h3><ul><li><a href="https://free-video-to-mp3.web-free.site/">Free Video to MP3 Converter</a></li><li><a href="https://free-mp3-cutter.web-free.site/">Free MP3 Cutter</a></li><li><a href="https://free-screen-recorder.web-free.site/">Free Screen Recorder</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Files</h3><ul><li><a href="https://free-zip-tool.web-free.site/">Free ZIP Tool</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Test data</h3><ul><li><a href="https://free-fake-address-generator.web-free.site/">Free Fake Address Generator</a></li><li><a href="https://free-fake-name-generator.web-free.site/">Free Fake Name Generator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Security &amp; passwords</h3><ul><li><a href="https://free-password-generator.web-free.site/">Free Password Generator</a></li></ul></div>
+  </div>
+</aside>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3e2f5f96ab32442ebb6e6f650615b58a"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

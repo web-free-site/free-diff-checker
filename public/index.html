@@ -1,0 +1,394 @@
+<!--
+  MIT License
+  Copyright (c) 2026 Timo Heimonen <timo.heimonen@proton.me>
+  See LICENSE file for full terms at github.com/timoheimonen/diffvoid
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Compare two texts or files side by side with a secure online diff tool. Step through changes, merge them, export a patch, detect invisible Unicode characters, and keep all processing in your browser.">
+    <meta name="keywords" content="text comparison, diff, text diff, compare texts, compare files, merge, patch, Free Diff Checker">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Timo Heimonen">
+    <meta name="version" content="2.3.0">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+    <meta property="og:title" content="Free Diff Checker - Secure Online Text Comparison Tool">
+    <meta property="og:description"
+        content="Compare texts instantly, detect hidden Unicode characters, and keep your data private with fully browser-side diff processing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://free-diff-checker.web-free.site/">
+    <meta property="og:site_name" content="Free Diff Checker">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://free-diff-checker.web-free.site/og-image.png">
+    <meta property="og:image:alt" content="Free Diff Checker secure online text comparison tool preview">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Diff Checker - Secure Online Text Comparison Tool">
+    <meta name="twitter:description"
+        content="Compare two texts side by side and detect invisible characters. All processing stays in your browser.">
+    <meta name="twitter:image" content="https://free-diff-checker.web-free.site/og-image.png">
+    <link rel="canonical" href="https://free-diff-checker.web-free.site/">
+    <link rel="alternate" hreflang="en" href="https://free-diff-checker.web-free.site/">
+    <title>Free Diff Checker — Compare Text and Files Online</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "WebApplication",
+                    "name": "Free Diff Checker",
+                    "url": "https://free-diff-checker.web-free.site/",
+                    "applicationCategory": "DeveloperApplication",
+                    "operatingSystem": "Any",
+                    "browserRequirements": "Requires JavaScript",
+                    "description": "Free browser-based text and file diff with side-by-side and unified views, merge, and patch export.",
+                    "isAccessibleForFree": true,
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+                },
+                {
+                    "@type": "FAQPage",
+                    "mainEntity": [
+                        {
+                            "@type": "Question",
+                            "name": "Is compared text uploaded to a server?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "No. Free Diff Checker runs the diff in your browser and same-origin Web Worker. Your text is not sent to our servers for comparison."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Can I compare two text files without installing software?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Yes. Paste or drop UTF-8, UTF-16, or Windows-1252 text files on each side, or paste directly into the panels."
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app-shell">
+    <header id="menu-bar">
+        <h1 id="logo">
+            <span class="logo-mark">Free Diff Checker</span>
+            <span class="logo-tagline">compare text and files in your browser</span>
+        </h1>
+        <div class="copy-clean-container">
+            <div class="mismatch-counter" id="mismatch-counter" style="display: none;"></div>
+            <div id="progress-indicator" class="progress-indicator" role="status" aria-live="polite"
+                aria-atomic="true" style="display: none;"></div>
+            <div id="compare-notice" class="compare-notice" role="status" aria-live="polite" aria-atomic="true"
+                style="display: none;"></div>
+            <div id="render-notice" class="render-notice" role="status" aria-live="polite" aria-atomic="true"
+                style="display: none;"></div>
+            <button id="copy-left" class="copy-clean-btn" type="button" aria-label="Copy all left text"
+                title="Copy all left text" hidden disabled aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span>Copy L</span>
+            </button>
+            <button id="copy-right" class="copy-clean-btn" type="button" aria-label="Copy all right text"
+                title="Copy all right text" hidden disabled aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span>Copy R</span>
+            </button>
+            <button id="copy-clean-left" class="copy-clean-btn" type="button" aria-label="Copy left text without invisible characters"
+                title="Copy left text without invisible characters" hidden disabled aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span>Clean L</span>
+            </button>
+            <button id="copy-clean-right" class="copy-clean-btn" type="button" aria-label="Copy right text without invisible characters"
+                title="Copy right text without invisible characters" hidden disabled aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span>Clean R</span>
+            </button>
+        </div>
+        <nav class="header-actions" aria-label="Actions">
+            <button id="whitespace-toggle" class="text-btn" type="button" aria-pressed="false"
+                title="Ignore indentation, trailing whitespace and the amount of spaces and tabs">ignore whitespace</button>
+            <button id="case-toggle" class="text-btn" type="button" aria-pressed="false"
+                title="Treat upper and lower case letters as the same">ignore case</button>
+            <button id="clear-button" class="icon-button" type="button" aria-label="Clear all text" title="Clear all text">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2.5 4h11M6.5 4V2.5h3V4M4 4l.6 9a1.5 1.5 0 0 0 1.5 1.5h3.8a1.5 1.5 0 0 0 1.5-1.5L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <span class="menu-divider" aria-hidden="true"></span>
+            <button id="theme-toggle" class="icon-button" type="button" aria-label="Switch to dark theme">
+                <svg class="moon-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </button>
+            <button id="info-btn" class="text-btn" type="button" aria-haspopup="dialog" aria-controls="info-overlay" aria-expanded="false"
+                title="How Free Diff Checker works">help</button>
+        </nav>
+    </header>
+    <div id="toolbar" class="toolbar" role="toolbar" aria-label="Comparison tools">
+        <div class="toolbar-group">
+            <button id="open-left" class="text-btn file-btn" type="button"
+                title="Open a file as the left text. It is read in your browser and never uploaded.">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h2.6l1.4 1.5h5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5v-7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <span id="open-left-label" class="file-btn-label">open left</span>
+            </button>
+            <button id="open-right" class="text-btn file-btn" type="button"
+                title="Open a file as the right text. It is read in your browser and never uploaded.">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h2.6l1.4 1.5h5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5v-7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <span id="open-right-label" class="file-btn-label">open right</span>
+            </button>
+            <button id="swap-button" class="icon-button" type="button" aria-label="Swap left and right"
+                title="Swap left and right">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2.5 5.5h11M10.5 2.5l3 3-3 3M13.5 10.5h-11M5.5 7.5l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+        <div id="change-nav" class="toolbar-group toolbar-nav" hidden>
+            <button id="prev-change" class="icon-button" type="button" aria-label="Previous change"
+                title="Previous change (Alt+Up or Shift+F7)">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <button id="next-change" class="icon-button" type="button" aria-label="Next change"
+                title="Next change (Alt+Down or F7)">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <span id="change-position" class="change-position" role="status" aria-live="polite" aria-atomic="true"></span>
+            <button id="use-left" class="text-btn" type="button" disabled
+                title="Keep the left version of the selected change: its lines replace the right side">use left</button>
+            <button id="use-right" class="text-btn" type="button" disabled
+                title="Keep the right version of the selected change: its lines replace the left side">use right</button>
+            <button id="undo-merge" class="text-btn" type="button" hidden
+                title="Undo the last merged change (Ctrl+Z)">undo</button>
+            <span id="change-stats" class="change-stats"></span>
+        </div>
+        <div id="result-tools" class="toolbar-group toolbar-end" hidden>
+            <button id="unified-toggle" class="text-btn" type="button" aria-pressed="false"
+                title="Show both texts in one column: removed lines above added lines">unified</button>
+            <button id="collapse-toggle" class="text-btn" type="button" aria-pressed="false"
+                title="Hide unchanged lines and keep three lines of context around each change">changes only</button>
+            <button id="copy-patch" class="text-btn" type="button"
+                title="Copy the differences as a unified diff (patch)">copy diff</button>
+            <button id="download-patch" class="text-btn" type="button"
+                title="Save the differences as a .patch file. The file is created in your browser.">save .patch</button>
+        </div>
+        <input id="file-input" type="file" hidden tabindex="-1" aria-hidden="true">
+    </div>
+    <div class="workspace">
+        <main aria-label="Text comparison workspace">
+            <div id="input-left" class="text-field" contenteditable="true" spellcheck="false" aria-label="Left text"
+                aria-multiline="true" data-placeholder="Paste text or drop a file: to this..."></div>
+            <div class="divider" id="divider" role="separator" tabindex="0" aria-label="Resize comparison panes"
+                aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50"></div>
+            <div id="input-right" class="text-field" contenteditable="true" spellcheck="false"
+                aria-label="Right text" aria-multiline="true" data-placeholder="Paste text or drop a file: compare this..."></div>
+        </main>
+        <div id="change-map" class="change-map" hidden aria-hidden="true" title="Overview of changes. Click to jump.">
+            <canvas id="change-map-canvas"></canvas>
+            <div id="change-map-viewport" class="change-map-viewport"></div>
+        </div>
+    </div>
+    <footer class="seo-content" aria-labelledby="seo-title">
+        <div class="seo-text">
+            <h2 id="seo-title">Compare text online with privacy-first diffing</h2>
+            <p>Free Diff Checker helps you compare two texts side by side, highlight exact differences, and detect invisible
+                Unicode characters that often break code, configs, and copied content. Everything runs in your browser,
+                so your text stays on your device.</p>
+        </div>
+        <nav class="seo-links" aria-label="More information">
+            <a href="/about">About</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="/contact">Contact</a>
+            <a href="https://web-free.site/">web-free.site</a>
+            <a href="https://github.com/timoheimonen/diffvoid" target="_blank" rel="noopener noreferrer">diffvoid (MIT)</a>
+        </nav>
+    </footer>
+    <div id="info-overlay" class="overlay-backdrop">
+        <div id="info-window" class="info-window" role="dialog" aria-modal="true" aria-labelledby="info-title">
+            <header class="info-header">
+                <div>
+                    <h2 id="info-title" class="info-title">Free Diff Checker</h2>
+                    <p class="info-tagline">Your secure place to compare <span class="tagline-diff">texts.</span></p>
+                </div>
+                <button id="info-close-btn" class="info-close-btn" type="button" title="Close" aria-label="Close">
+                    <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </header>
+
+            <div class="info-content">
+                <section>
+                    <h3>How it works</h3>
+                    <ol class="info-steps">
+                        <li>
+                            <span class="step-num">1</span>
+                            <div><strong>Paste or open</strong><span>Paste one text into each panel, or drop or open a file. Files are read in your browser and never uploaded.</span></div>
+                        </li>
+                        <li>
+                            <span class="step-num">2</span>
+                            <div><strong>Compare</strong><span>The diff appears automatically, line by line. Use <em>ignore whitespace</em> to set aside indentation and spacing, and <em>ignore case</em> for upper and lower case.</span></div>
+                        </li>
+                        <li>
+                            <span class="step-num">3</span>
+                            <div><strong>Review</strong><span>Step through the changes with the arrows, <em>Alt+Up/Down</em> or <em>F7</em>, or click the map on the right. <em>changes only</em> hides unchanged lines, and <em>unified</em> shows both texts in one column.</span></div>
+                        </li>
+                        <li>
+                            <span class="step-num">4</span>
+                            <div><strong>Merge and export</strong><span>Select a change and keep its left or right version. Copy either side, or save the differences as a patch.</span></div>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h3>Reading the diff</h3>
+                    <div class="info-legend">
+                        <div class="legend-card">
+                            <span class="legend-sample">hello <span class="diff-mismatch">there</span></span>
+                            <strong>Modified</strong>
+                            <span class="legend-desc">changed characters in red</span>
+                        </div>
+                        <div class="legend-card">
+                            <span class="legend-sample legend-gap" aria-hidden="true"></span>
+                            <strong>Added or missing</strong>
+                            <span class="legend-desc">an empty gap on the other side</span>
+                        </div>
+                        <div class="legend-card">
+                            <span class="legend-sample legend-moved">moved(<span class="diff-mismatch">x</span>);</span>
+                            <strong>Moved</strong>
+                            <span class="legend-desc">lines in another place, edits in red</span>
+                        </div>
+                        <div class="legend-card">
+                            <span class="legend-sample">caf<span class="diff-mismatch diff-equivalent">é</span></span>
+                            <strong>Same characters</strong>
+                            <span class="legend-desc">different Unicode form (NFC/NFD)</span>
+                        </div>
+                        <div class="legend-card">
+                            <span class="legend-sample">a<span class="invisible-nbsp" aria-hidden="true"></span>b</span>
+                            <strong>Invisible</strong>
+                            <span class="legend-desc">hidden spaces and marks</span>
+                        </div>
+                        <div class="legend-card">
+                            <span class="legend-sample">p<span class="confusable-char">а</span>ypal</span>
+                            <strong>Confusable</strong>
+                            <span class="legend-desc">lookalike letters, e.g. Cyrillic</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Good to know</h3>
+                    <ul class="info-facts">
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" /><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                            <span><strong>Copy L/R</strong> copies the exact original text. <strong>Clean L/R</strong> appears when invisible characters are found and copies a normalized version.</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v12M5 5.5 2.5 8 5 10.5M11 5.5 13.5 8 11 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            <span>Drag the divider to resize the panels. Double-click it to reset to 50/50.</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 5.5h11M10.5 2.5l3 3-3 3M13.5 10.5h-11M5.5 7.5l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            <span><strong>use left</strong> and <strong>use right</strong> change the text on the other side, and <strong>undo</strong> takes a merge back. <strong>copy diff</strong> and <strong>save .patch</strong> describe the exact texts, including differences that an ignore option hides.</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5" /></svg>
+                            <span>Compared text is processed locally in your browser, not on our servers for diffing.</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <footer class="info-footer">
+                <nav class="info-links" aria-label="More information">
+                    <a href="/about">About</a>
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="https://github.com/timoheimonen/diffvoid" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                        GitHub
+                    </a>
+                </nav>
+                <span class="info-version">open source · v2.3.0</span>
+            </footer>
+        </div>
+    </div>
+    </div>
+    <script src="shared-diff.js"></script>
+    <script src="diff-controller.js"></script>
+    <script src="virtual-diff.js"></script>
+    <script src="script.js"></script>
+    <script data-cfasync="false" data-ad="popunder" src="https://abscloud.org/1/f6ba4b22631d0daee5daabeea0c1d143"></script>
+    <script data-cfasync="false" data-ad="social-bar" src="https://bauval.org/14/82dc497890847b316dfb78ed935ea20e"></script>
+    <script src="wf-ads-tool.js" defer></script>
+<aside id="wf-more-tools" class="wf-more-tools" aria-labelledby="wf-mt-title">
+  <style>
+    .wf-more-tools{box-sizing:border-box;width:100%;margin:2.5rem 0 0;padding:1.5rem 1rem 5rem;border-top:1px solid rgba(0,0,0,.12);background:rgba(248,249,251,.97);color:#1a1a1a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;line-height:1.5}
+    .wf-more-tools *{box-sizing:border-box}
+    .wf-more-tools h2{margin:0 0 .35rem;font-size:1.15rem;font-weight:700}
+    .wf-more-tools .wf-mt-lead{margin:0 0 1rem;color:#333}
+    .wf-more-tools .wf-mt-lead a{color:#0b57d0}
+    .wf-more-tools .wf-mt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem 1.25rem}
+    .wf-more-tools h3{margin:0 0 .4rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:#444}
+    .wf-more-tools ul{margin:0;padding:0;list-style:none}
+    .wf-more-tools li{margin:0 0 .25rem}
+    .wf-more-tools a{color:#0b57d0;text-decoration:underline}
+    .wf-more-tools a:hover{text-decoration:none}
+    @media (prefers-color-scheme:dark){
+      .wf-more-tools{background:rgba(22,24,28,.96);color:#f2f2f2;border-top-color:rgba(255,255,255,.14)}
+      .wf-more-tools .wf-mt-lead,.wf-more-tools h3{color:#c8c8c8}
+      .wf-more-tools a{color:#8ab4f8}
+    }
+  </style>
+  <h2 id="wf-mt-title">More free tools</h2>
+  <p class="wf-mt-lead">These utilities run in your browser. Browse the full list on <a href="https://web-free.site/">web-free.site</a>.</p>
+  <div class="wf-mt-grid">
+    <div class="wf-mt-cat wf-mt-guides"><h3>Guides on this site</h3><ul><li><a href="/how-to-compare-two-text-files">How to compare two text files</a></li><li><a href="/how-to-make-a-unified-diff-patch">How to make a unified diff patch</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Documents &amp; writing</h3><ul><li><a href="https://free-word-counter.web-free.site/">Free Word Counter</a></li><li><a href="https://free-pdf-converter.web-free.site/">Free PDF Converter</a></li><li><a href="https://free-cv-maker.web-free.site/">Free CV Maker</a></li><li><a href="https://free-invoice-generator.web-free.site/">Free Invoice Generator</a></li><li><a href="https://free-typing-test.web-free.site/">Free Typing Test</a></li><li><a href="https://free-signature-generator.web-free.site/">Free Signature Generator</a></li><li><a href="https://free-email-signature-generator.web-free.site/">Free Email Signature Generator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Images &amp; codes</h3><ul><li><a href="https://free-qr-code-creator.web-free.site/">Free QR Code Creator</a></li><li><a href="https://free-image-resizer.web-free.site/">Free Image Resizer</a></li><li><a href="https://free-image-to-text.web-free.site/">Free Image to Text</a></li><li><a href="https://free-background-remover.web-free.site/">Free Background Remover</a></li><li><a href="https://free-image-compressor.web-free.site/">Free Image Compressor</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Calculators &amp; currency</h3><ul><li><a href="https://free-online-calculator.web-free.site/">Free Online Calculator</a></li><li><a href="https://free-currency-converter.web-free.site/">Free Currency Converter</a></li><li><a href="https://free-unit-converter.web-free.site/">Free Unit Converter</a></li><li><a href="https://free-loan-calculator.web-free.site/">Free Loan Calculator</a></li><li><a href="https://free-age-calculator.web-free.site/">Free Age Calculator</a></li><li><a href="https://free-percentage-calculator.web-free.site/">Free Percentage Calculator</a></li><li><a href="https://free-bmi-calculator.web-free.site/">Free BMI Calculator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Text &amp; SEO</h3><ul><li><a href="https://free-ai-humanizer.web-free.site/">Free AI Humanizer</a></li><li><a href="https://free-seo-generator.web-free.site/">Free SEO Generator</a></li><li><a href="https://free-backlink-generator.web-free.site/">Free Backlink Generator</a></li><li><a href="https://free-json-formatter.web-free.site/">Free JSON Formatter</a></li><li><a href="https://free-text-to-speech.web-free.site/">Free Text to Speech</a></li><li><a href="https://free-speech-to-text.web-free.site/">Free Speech to Text</a></li><li><strong>Free Diff Checker</strong></li></ul></div>
+    <div class="wf-mt-cat"><h3>Audio &amp; video</h3><ul><li><a href="https://free-video-to-mp3.web-free.site/">Free Video to MP3 Converter</a></li><li><a href="https://free-mp3-cutter.web-free.site/">Free MP3 Cutter</a></li><li><a href="https://free-screen-recorder.web-free.site/">Free Screen Recorder</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Files</h3><ul><li><a href="https://free-zip-tool.web-free.site/">Free ZIP Tool</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Test data</h3><ul><li><a href="https://free-fake-address-generator.web-free.site/">Free Fake Address Generator</a></li><li><a href="https://free-fake-name-generator.web-free.site/">Free Fake Name Generator</a></li></ul></div>
+    <div class="wf-mt-cat"><h3>Security &amp; passwords</h3><ul><li><a href="https://free-password-generator.web-free.site/">Free Password Generator</a></li></ul></div>
+  </div>
+</aside>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3e2f5f96ab32442ebb6e6f650615b58a"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://free-diff-checker.web-free.site/sitemap.xml
